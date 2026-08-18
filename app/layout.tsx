@@ -1,10 +1,16 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Poppins } from "next/font/google"
+import { Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "600", "700"],
+  variable: "--font-sans",
+})
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -20,10 +26,17 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        poppins.variable
+      )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
