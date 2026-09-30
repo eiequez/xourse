@@ -67,11 +67,11 @@ function CapScene() {
   return (
     <Canvas camera={{ position: [0, 2, 4.2], fov: 40 }}>
       <ambientLight intensity={0.7} />
-      <directionalLight position={[4, 6, 3]} intensity={1.6} color="#EDEAE2" />
+      <directionalLight position={[4, 6, 3]} intensity={1.6} color="#F2F4F3" />
       <directionalLight
         position={[-4, 2, -2]}
         intensity={0.5}
-        color="#C9A227"
+        color="#A9927D"
       />
       <Suspense fallback={null}>
         <GradCap />
@@ -82,10 +82,10 @@ function CapScene() {
 
 // ---------- Transcript chips: small rating cards that drift in ----------
 const chips = [
-  { code: "BUS3013", rating: "4.8", top: "18%", left: "6%", delay: 0.9 },
-  { code: "CS2044", rating: "3.2", top: "68%", left: "10%", delay: 1.1 },
-  { code: "PSY1120", rating: "4.5", top: "12%", left: "82%", delay: 1.0 },
-  { code: "ECO2210", rating: "2.9", top: "72%", left: "80%", delay: 1.2 },
+  { code: "G0234", top: "18%", left: "6%", delay: 0.9 },
+  { code: "G0102", top: "68%", left: "10%", delay: 1.1 },
+  { code: "G0156", top: "12%", left: "82%", delay: 1.0 },
+  { code: "G0103", top: "72%", left: "80%", delay: 1.2 },
 ]
 
 function TranscriptChips() {
@@ -108,13 +108,10 @@ function TranscriptChips() {
             ease: [0.16, 1, 0.3, 1],
           }}
           style={{ top: c.top, left: c.left }}
-          className="flex items-center gap-2 rounded-full border border-brass/30 bg-ink/70 px-3 py-1.5 backdrop-blur-sm"
+          className="flex items-center gap-2 rounded-full border border-sand/30 bg-night/70 px-3 py-1.5 backdrop-blur-sm"
         >
-          <span className="font-mono text-[11px] tracking-wide text-parchment/70">
+          <span className="font-mono text-[11px] tracking-wide text-bone/70">
             {c.code}
-          </span>
-          <span className="font-mono text-[11px] font-bold text-brass">
-            {c.rating}
           </span>
         </motion.div>
       ))}
@@ -124,7 +121,7 @@ function TranscriptChips() {
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden bg-ink px-6 lg:px-24">
+    <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden bg-night px-6 lg:px-24">
       {/* faint scantron-bubble grid, ties back to "grading" without literal icons */}
       <DotPattern
         className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-[0.15]"
@@ -138,7 +135,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-4 font-mono text-xs tracking-[0.2em] text-brass uppercase"
+            className="mb-4 font-mono text-xs tracking-[0.2em] text-sand uppercase"
           >
             XMUM electives, reviewed by students who took them
           </motion.p>
@@ -147,21 +144,20 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-serif text-5xl leading-[1.05] text-parchment lg:text-6xl"
-            style={{ fontFamily: "var(--font-fraunces)" }}
+            className="font-heading text-5xl leading-[1.05] font-semibold tracking-tight text-white lg:text-6xl"
           >
             Know before
             <br />
-            you <em className="text-brass not-italic">enroll</em>
+            you <em className="text-sand not-italic">enroll</em>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-6 max-w-md text-base leading-relaxed text-parchment/60"
+            className="mt-6 max-w-md text-base leading-relaxed text-bone/60"
           >
-            Real ratings on workload, grading, and whether the syllabus lied.
+            Course ratings on workload, grading, and whether the syllabus lied.
             Written by XMUM students, for XMUM students only.
           </motion.p>
 
@@ -173,14 +169,14 @@ export default function HeroSection() {
           >
             <Link href="/auth/signup">
               <ShimmerButton
-                shimmerColor="#EDEAE2"
-                background="#C9A227"
+                shimmerColor="#A9927D"
+                background="#49111C"
                 className="text-sm font-medium text-white"
               >
                 Browse electives
               </ShimmerButton>
             </Link>
-            <p className="text-sm font-medium text-parchment/70 decoration-parchment/30 transition">
+            <p className="text-sm font-medium text-bone/70 decoration-bone/30 transition">
               Rate a course you took
             </p>
           </motion.div>
@@ -195,7 +191,7 @@ export default function HeroSection() {
       <motion.div
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-parchment/30"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-bone/30"
       >
         <span className="font-mono text-xs tracking-wide">scroll</span>
       </motion.div>
@@ -203,4 +199,4 @@ export default function HeroSection() {
   )
 }
 
-useGLTF.preload("/graduation-cap.glb")
+useGLTF.preload("/graduation_hat.glb")

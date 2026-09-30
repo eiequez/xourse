@@ -1,21 +1,16 @@
-"use client";
+"use client"
 
-import { type HTMLAttributes } from "react";
-import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
+import { type HTMLAttributes } from "react"
+import { motion } from "motion/react"
+import { cn } from "@/lib/utils"
 
 type GlowingBadgeVariant =
-  | "default"
-  | "success"
-  | "warning"
-  | "error"
-  | "info"
-  | "neutral";
+  "default" | "success" | "warning" | "error" | "info" | "neutral"
 
 interface GlowingBadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  variant?: GlowingBadgeVariant;
-  pulse?: boolean;
-  dot?: boolean;
+  variant?: GlowingBadgeVariant
+  pulse?: boolean
+  dot?: boolean
 }
 
 const variantStyles: Record<
@@ -52,7 +47,7 @@ const variantStyles: Record<
     glow: "bg-blue-500",
     dot: "bg-blue-200",
   },
-};
+}
 
 function GlowingBadge({
   variant = "default",
@@ -62,21 +57,21 @@ function GlowingBadge({
   className,
   ...props
 }: GlowingBadgeProps) {
-  const styles = variantStyles[variant];
+  const styles = variantStyles[variant]
 
   return (
     <span className="relative inline-flex">
       <span
         className={cn(
-          "absolute inset-0 rounded-full blur-md opacity-60",
-          styles.glow,
+          "absolute inset-0 rounded-full opacity-60 blur-md",
+          styles.glow
         )}
       />
       <span
         className={cn(
-          "relative inline-flex items-center gap-1.5 rounded-full  px-3 py-1 text-xs font-medium",
+          "relative inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
           styles.badge,
-          className,
+          className
         )}
         {...props}
       >
@@ -86,7 +81,7 @@ function GlowingBadge({
               <motion.span
                 className={cn(
                   "absolute inline-flex h-full w-full rounded-full opacity-75",
-                  styles.dot,
+                  styles.dot
                 )}
                 animate={{ scale: [1, 2.5, 1], opacity: [0.75, 0, 0.75] }}
                 transition={{
@@ -99,7 +94,7 @@ function GlowingBadge({
             <span
               className={cn(
                 "relative inline-flex h-1.5 w-1.5 rounded-full",
-                styles.dot,
+                styles.dot
               )}
             />
           </span>
@@ -107,8 +102,8 @@ function GlowingBadge({
         {children}
       </span>
     </span>
-  );
+  )
 }
 
-export { GlowingBadge };
-export type { GlowingBadgeProps, GlowingBadgeVariant };
+export { GlowingBadge }
+export type { GlowingBadgeProps, GlowingBadgeVariant }

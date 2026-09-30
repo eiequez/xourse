@@ -1,27 +1,32 @@
+import type { Metadata } from "next"
+import Link from "next/link"
 import { MailCheckIcon } from "lucide-react"
+
+import { AuthShell } from "@/components/auth/auth-shell"
+
+export const metadata: Metadata = { title: "Check your email" }
 
 export default function AuthSuccessPage() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-[#12151f] p-6 md:p-10">
-      <div className="w-full max-w-sm rounded-lg border border-[#edeae2]/10 bg-[#edeae2]/5 p-8 text-center">
-        <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-[#c9a227]/15">
-          <MailCheckIcon className="size-6 text-[#c9a227]" />
+    <AuthShell>
+      <div className="flex flex-col items-center gap-3 text-center">
+        <div className="flex size-12 items-center justify-center rounded-full bg-sand/15">
+          <MailCheckIcon className="size-6 text-sand" />
         </div>
-
-        <h1 className="text-xl font-bold text-[#edeae2]">Check your email</h1>
-
-        <p className="mt-2 text-sm text-[#edeae2]/60">
-          We&apos;ve sent you a verification link. Please check your inbox and
-          click the link to confirm your account before signing in.
+        <h1 className="font-heading text-2xl font-semibold tracking-tight text-white">
+          Check your email
+        </h1>
+        <p className="text-sm text-balance text-bone/60">
+          We&apos;ve sent you a verification link. Click it to confirm your
+          account, then sign in.
         </p>
-
-        <a
+        <Link
           href="/auth/login"
-          className="mt-6 inline-block text-sm text-[#c9a227] hover:underline"
+          className="mt-2 text-sm text-sand underline-offset-4 hover:underline"
         >
           Back to login
-        </a>
+        </Link>
       </div>
-    </div>
+    </AuthShell>
   )
 }

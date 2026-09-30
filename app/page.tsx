@@ -6,16 +6,24 @@ import FinalCTA from "@/components/sections/final-cta"
 import Footer from "@/components/Footer"
 import LedgerMarquee from "@/components/sections/ledger-marqee"
 import GradeReveal from "@/components/sections/grade-reveal"
+import { getLandingData } from "@/lib/landing-data"
 
-export default function Home() {
+// The landing is pre-rendered and rebuilt in the background at most hourly.
+// Review changes also rebuild it right away (revalidatePath("/") in
+// app/browse/[id]/actions.ts), so visitors never wait on the database.
+export const revalidate = 3600
+
+export default async function Home() {
+  const { trending, ledger, spotlight } = await getLandingData()
+
   return (
-    <main className="bg-ink">
+    <main className="bg-night">
       <HeroSection />
-      <LedgerMarquee />
+      <LedgerMarquee entries={ledger} />
       <HowItWorks />
       <GradeReveal />
-      <TrendingElectives />
-      <ReviewSpotlight />
+      <TrendingElectives courses={trending} />
+      <ReviewSpotlight reviews={spotlight} />
       <FinalCTA />
       <Footer />
     </main>

@@ -28,7 +28,7 @@ export default function GradeReveal() {
   )
 
   return (
-    <section ref={ref} className="relative h-[220vh] bg-ink">
+    <section ref={ref} className="relative h-[220vh] bg-night">
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
         <motion.div
           style={{ opacity: flickerOpacity }}
@@ -38,32 +38,24 @@ export default function GradeReveal() {
           <FlickeringGrid
             squareSize={6}
             gridGap={10}
-            color="#60A5FA"
+            color="#A9927D"
             flickerChance={0.2}
             className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_80%)]"
           />
         </motion.div>
 
-        <p className="relative mb-4 font-mono text-xs tracking-[0.2em] text-brass uppercase">
+        <p className="relative mb-4 font-mono text-xs tracking-[0.2em] text-sand uppercase">
           Across every reviewed elective
         </p>
 
         <motion.div style={{ scale }} className="relative flex items-baseline">
-          <span
-            className="text-[20vw] leading-none text-parchment lg:text-[9rem]"
-            style={{ fontFamily: "var(--font-fraunces)" }}
-          >
+          <span className="font-heading text-[20vw] leading-none font-semibold tracking-tight text-white lg:text-[9rem]">
             {display}
           </span>
-          <span className="ml-3 text-xl text-parchment/40 lg:text-2xl">
+          <span className="ml-3 text-xl text-bone/40 lg:text-2xl">
             / 5.0 average
           </span>
         </motion.div>
-
-        <p className="relative mt-6 max-w-sm text-center text-sm text-parchment/50">
-          Pulled straight from student reviews. Nothing curated, nothing
-          filtered out.
-        </p>
       </div>
     </section>
   )

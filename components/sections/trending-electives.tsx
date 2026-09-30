@@ -1,81 +1,57 @@
 // app/components/TrendingElectives.tsx — same as before, with the fixed badge prop
 "use client"
 
+import Link from "next/link"
 import { motion } from "motion/react"
 import { TiltCard } from "@/components/unlumen-ui/tilt-card"
 import { GlowingBadge } from "@/components/unlumen-ui/glowing-badge"
 import { ScrambleText } from "@/components/unlumen-ui/scramble-text"
+import { courseHref, plural, ratingTextClass } from "@/lib/courses"
+import type { TrendingCourse } from "@/lib/landing-data"
+import { cn } from "@/lib/utils"
 
-type Course = {
-  code: string
-  title: string
-  rating: number
-  reviews: number
-  tag: string
+// Desktop columns follow the number of cards (at most 5)
+const LG_COLS: Record<number, string> = {
+  1: "lg:grid-cols-1",
+  2: "lg:grid-cols-2",
+  3: "lg:grid-cols-3",
+  4: "lg:grid-cols-4",
+  5: "lg:grid-cols-5",
 }
 
-const courses: Course[] = [
-  {
-    code: "BUS3013",
-    title: "Consumer Behaviour",
-    rating: 4.8,
-    reviews: 62,
-    tag: "Light workload",
-  },
-  {
-    code: "PSY1120",
-    title: "Social Psychology",
-    rating: 4.5,
-    reviews: 41,
-    tag: "Great lecturer",
-  },
-  {
-    code: "CS2044",
-    title: "Intro to AI",
-    rating: 3.2,
-    reviews: 88,
-    tag: "Heavy workload",
-  },
-  {
-    code: "ECO2210",
-    title: "Behavioural Economics",
-    rating: 2.9,
-    reviews: 27,
-    tag: "Tough grading",
-  },
-]
+export default function TrendingElectives({
+  courses,
+}: {
+  courses: TrendingCourse[]
+}) {
+  if (courses.length === 0) return null
 
-function ratingTextClass(rating: number) {
-  if (rating >= 4.0) return "text-brass"
-  if (rating >= 3.0) return "text-sage"
-  return "text-signal"
-}
-
-export default function TrendingElectives() {
   return (
-    <section className="border-parchment/10 px-6 py-24 lg:px-24">
+    <section className="border-umber/50 px-6 py-24 lg:px-24">
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 flex items-end justify-between">
           <div>
-            <p className="mb-3 font-mono text-xs tracking-[0.2em] text-brass uppercase">
+            <p className="mb-3 font-mono text-xs tracking-[0.2em] text-sand uppercase">
               This semester
             </p>
-            <h2
-              className="text-3xl text-parchment lg:text-4xl"
-              style={{ fontFamily: "var(--font-fraunces)" }}
-            >
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-white lg:text-4xl">
               Trending electives
             </h2>
           </div>
-          <a
-            href="/electives"
-            className="hidden text-sm text-parchment/60 underline decoration-parchment/30 underline-offset-4 hover:text-parchment sm:block"
+          <Link
+            href="/browse"
+            className="hidden text-sm text-bone/60 underline decoration-bone/30 underline-offset-4 hover:text-bone sm:block"
           >
             View all electives
-          </a>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          className={cn(
+            "grid grid-cols-1 gap-4 sm:grid-cols-2",
+            LG_COLS[courses.length]
+          )}
+        >
           {courses.map((c, i) => (
             <motion.div
               key={c.code}
@@ -86,31 +62,28 @@ export default function TrendingElectives() {
             >
               <TiltCard
                 title=""
-                className="flex h-full flex-col justify-between rounded-2xl border border-parchment/10 bg-parchment/[0.03] p-5"
+                className="flex h-full flex-col justify-between rounded-2xl border border-umber/50 bg-bone/[0.03] p-5"
               >
-                <a
-                  href={`/electives/${c.code.toLowerCase()}`}
-                  className="group"
-                >
+                <Link href={courseHref(c.code)} className="group">
                   <div className="flex items-start justify-between">
-                    <span className="font-mono text-xs tracking-wide text-parchment/40">
+                    <span className="font-mono text-xs tracking-wide">
                       {c.code}
                     </span>
                     <GlowingBadge className={ratingTextClass(c.rating)}>
                       <ScrambleText
                         text={c.rating.toFixed(1)}
-                        className="font-mono text-xs font-bold"
+                        className="font-mono text-xs font-bold text-black"
                       />
                     </GlowingBadge>
                   </div>
-                  <h3 className="mt-3 text-lg text-parchment group-hover:text-brass">
-                    {c.title}
+                  <h3 className="mt-3 text-lg text-bone group-hover:text-sand">
+                    {c.name}
                   </h3>
-                  <div className="mt-6 flex items-center justify-between text-xs text-parchment/40">
+                  <div className="mt-6 flex items-center justify-between text-xs text-bone/40">
                     <span>{c.tag}</span>
-                    <span>{c.reviews} reviews</span>
+                    <span>{plural(c.reviews, "review")}</span>
                   </div>
-                </a>
+                </Link>
               </TiltCard>
             </motion.div>
           ))}

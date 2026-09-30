@@ -1,20 +1,33 @@
-import { createClient } from "@/lib/supabase/server"
-import { signOut } from "@/lib/actions/auth"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import Navbar from "@/components/Navbar"
+import type { Metadata } from "next"
 
-export default async function Browse() {
-  const supabase = await createClient()
+import { getCourseSummaries } from "@/lib/course-queries"
+import { parseSort } from "@/lib/courses"
+import { CourseBrowser } from "@/components/browse/course-browser"
+import { BrowseHeader } from "@/components/browse/browse-header"
 
-  const { data } = await supabase.auth.getUser()
+export const metadata: Metadata = {
+  title: "Browse electives",
+}
 
-  console.log(data)
-  console.log(data.user?.user_metadata.avatar_url)
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value
+}
+
+export default async function Browse(props: PageProps<"/browse">) {
+  const searchParams = await props.searchParams
+  const courses = await getCourseSummaries()
 
   return (
-    <main className="h-screen bg-ink">
-      <Navbar />
-    </main>
+    <div className="px-6 pt-14 pb-24 lg:px-24 lg:pt-20">
+      <div className="mx-auto max-w-7xl">
+        <BrowseHeader />
+        <CourseBrowser
+          courses={courses}
+          initialQuery={firstParam(searchParams.q) ?? ""}
+          initialType={firstParam(searchParams.type) ?? "all"}
+          initialSort={parseSort(firstParam(searchParams.sort))}
+        />
+      </div>
+    </div>
   )
 }

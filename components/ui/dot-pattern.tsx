@@ -61,6 +61,12 @@ interface DotPatternProps extends React.SVGProps<SVGSVGElement> {
  * - Dots color can be controlled via the text color utility classes
  */
 
+// Deterministic pseudo-random in [0, 1): keeps render pure and SSR/client in sync
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10_000
+  return x - Math.floor(x)
+}
+
 export function DotPattern({
   width = 16,
   height = 16,
@@ -102,8 +108,8 @@ export function DotPattern({
       return {
         x: col * width + cx + x,
         y: row * height + cy + y,
-        delay: Math.random() * 5,
-        duration: Math.random() * 3 + 2,
+        delay: seededRandom(i + 1) * 5,
+        duration: seededRandom(i + 10_000) * 3 + 2,
       }
     }
   )

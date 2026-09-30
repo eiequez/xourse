@@ -2,31 +2,33 @@
 "use client"
 
 import { motion } from "motion/react"
+import Link from "next/link"
 
 export default function FinalCTA() {
   return (
-    <section className="border-parchment/10 border-t px-6 py-28 lg:px-24">
+    <section className="border-t border-umber/50 px-6 py-28 lg:px-24">
       <div className="mx-auto max-w-3xl text-center">
         <motion.h2
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-parchment text-4xl leading-tight lg:text-5xl"
-          style={{ fontFamily: "var(--font-fraunces)" }}
+          className="font-heading text-4xl leading-tight font-semibold tracking-tight text-white lg:text-5xl"
         >
-          Only XMUM students get in.
+          For XMUM students
           <br />
-          <span className="text-brass">That's what keeps it honest.</span>
+          <span className="text-sand">
+            Who doesn&apos;t want to waste time on useless courses.
+          </span>
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-parchment/50 mx-auto mt-5 max-w-md text-sm leading-relaxed"
+          className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-bone/50"
         >
-          Sign in with your XMUM email. No outside noise, no fake reviews, just
-          the people actually sitting in the room next to you.
+          no fake reviews, just the people actually sitting in the room next to
+          you.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -35,9 +37,11 @@ export default function FinalCTA() {
           transition={{ delay: 0.2 }}
           className="mt-9"
         >
-          <button className="bg-brass text-ink hover:bg-brass/90 rounded-full px-7 py-3 text-sm font-medium transition">
-            Sign in with XMUM email
-          </button>
+          <Link href="/auth/signup">
+            <button className="rounded-full bg-wine px-7 py-3 text-sm font-medium text-white transition hover:bg-wine/90">
+              Sign up
+            </button>
+          </Link>
         </motion.div>
       </div>
     </section>

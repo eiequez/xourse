@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { motion } from "motion/react";
+import * as React from "react"
+import { motion } from "motion/react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 interface ClippedCircleProps {
-  className?: string;
-  circleClassName?: string;
-  circleSize?: number;
+  className?: string
+  circleClassName?: string
+  circleSize?: number
 }
 
 function ClippedCircle({
@@ -16,58 +16,58 @@ function ClippedCircle({
   circleClassName = "bg-white/20",
   circleSize = 400,
 }: ClippedCircleProps) {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = React.useState(false);
-  const [position, setPosition] = React.useState({ x: "50%", y: "50%" });
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const [isHovered, setIsHovered] = React.useState(false)
+  const [position, setPosition] = React.useState({ x: "50%", y: "50%" })
 
   React.useEffect(() => {
-    const container = containerRef.current;
-    if (!container || !container.parentElement) return;
+    const container = containerRef.current
+    if (!container || !container.parentElement) return
 
-    const parent = container.parentElement;
+    const parent = container.parentElement
 
     const handleMouseEnter = (e: MouseEvent) => {
-      const rect = parent.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      setPosition({ x: `${x}%`, y: `${y}%` });
-      setIsHovered(true);
-    };
+      const rect = parent.getBoundingClientRect()
+      const x = ((e.clientX - rect.left) / rect.width) * 100
+      const y = ((e.clientY - rect.top) / rect.height) * 100
+      setPosition({ x: `${x}%`, y: `${y}%` })
+      setIsHovered(true)
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = parent.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      setPosition({ x: `${x}%`, y: `${y}%` });
-    };
+      const rect = parent.getBoundingClientRect()
+      const x = ((e.clientX - rect.left) / rect.width) * 100
+      const y = ((e.clientY - rect.top) / rect.height) * 100
+      setPosition({ x: `${x}%`, y: `${y}%` })
+    }
 
     const handleMouseLeave = () => {
-      setIsHovered(false);
-    };
+      setIsHovered(false)
+    }
 
-    parent.addEventListener("mouseenter", handleMouseEnter);
-    parent.addEventListener("mousemove", handleMouseMove);
-    parent.addEventListener("mouseleave", handleMouseLeave);
+    parent.addEventListener("mouseenter", handleMouseEnter)
+    parent.addEventListener("mousemove", handleMouseMove)
+    parent.addEventListener("mouseleave", handleMouseLeave)
 
     return () => {
-      parent.removeEventListener("mouseenter", handleMouseEnter);
-      parent.removeEventListener("mousemove", handleMouseMove);
-      parent.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
+      parent.removeEventListener("mouseenter", handleMouseEnter)
+      parent.removeEventListener("mousemove", handleMouseMove)
+      parent.removeEventListener("mouseleave", handleMouseLeave)
+    }
+  }, [])
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "absolute inset-0 overflow-hidden pointer-events-none",
-        className,
+        "pointer-events-none absolute inset-0 overflow-hidden",
+        className
       )}
     >
       <motion.div
         className={cn(
           "pointer-events-none absolute rounded-full",
-          circleClassName,
+          circleClassName
         )}
         style={{
           left: position.x,
@@ -88,7 +88,7 @@ function ClippedCircle({
         }}
       />
     </div>
-  );
+  )
 }
 
-export { ClippedCircle, type ClippedCircleProps };
+export { ClippedCircle, type ClippedCircleProps }

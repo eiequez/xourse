@@ -1,27 +1,33 @@
 // app/components/LedgerMarquee.tsx
-import { Marquee } from "../ui/marquee"
-const entries = [
-  { code: "BUS3013", rating: "4.8" },
-  { code: "CS2044", rating: "3.2" },
-  { code: "PSY1120", rating: "4.5" },
-  { code: "ECO2210", rating: "2.9" },
-  { code: "MKT2101", rating: "4.1" },
-  { code: "PHY1001", rating: "3.6" },
-]
+import Link from "next/link"
 
-export default function LedgerMarquee() {
+import { courseHref, ratingTextClass } from "@/lib/courses"
+import type { LedgerEntry } from "@/lib/landing-data"
+import { cn } from "@/lib/utils"
+import { Marquee } from "../ui/marquee"
+
+export default function LedgerMarquee({ entries }: { entries: LedgerEntry[] }) {
+  if (entries.length === 0) return null
+
   return (
-    <div className="border-y border-parchment/10 bg-ink py-4">
+    <div className="border-y border-umber/50 bg-night py-4">
       <Marquee pauseOnHover className="[--duration:35s]">
         {entries.map((e) => (
-          <div
+          <Link
             key={e.code}
-            className="mx-6 flex items-center gap-2 font-mono text-xs text-parchment/50"
+            href={courseHref(e.code)}
+            className="mx-6 flex items-center gap-2 font-mono text-xs text-bone/50 transition-colors hover:text-bone"
           >
             <span>{e.code}</span>
-            <span className="text-brass">{e.rating}</span>
-            <span className="text-parchment/20">·</span>
-          </div>
+            {e.rating === null ? (
+              <span className="text-bone/30">new</span>
+            ) : (
+              <span className={cn(ratingTextClass(e.rating))}>
+                {e.rating.toFixed(1)}
+              </span>
+            )}
+            <span className="text-bone/20">·</span>
+          </Link>
         ))}
       </Marquee>
     </div>
