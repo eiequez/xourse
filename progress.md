@@ -13,8 +13,8 @@ Overall: the landing-page UI and auth plumbing are built, and the DB schema exis
   - [x] Ledger marquee of course codes and ratings.
   - [x] How-it-works: a scroll-linked 3-step timeline.
   - [x] Grade reveal: a scroll-driven average-rating counter.
-  - [x] Trending electives: tilt cards.
-  - [x] Review spotlight: horizontal scroll of quotes.
+  - [x] Trending electives: tilt cards (max 4; 1, 2, then 4 columns).
+  - [x] Review spotlight: shadcn carousel of the newest 5 reviews (swipe, arrows, dots).
   - [x] Final CTA and footer.
 - [x] Supabase SSR clients (`lib/supabase/client.ts`, `lib/supabase/server.ts`).
 - [x] Email/password signup and login server actions, with validation and error display.
@@ -57,15 +57,31 @@ Overall: the landing-page UI and auth plumbing are built, and the DB schema exis
 
 - [x] **Dependency cleanup** (2026-09-30): Next 16.3.6; `shadcn` (CLI, only used for `@import "shadcn/tailwind.css"` at build time) and `@types/three` moved to devDependencies; unused `framer-motion` and `@splinetool/react-spline` removed. `pnpm audit --prod` is clean.
 
+- [x] **Landing mobile pass, requests.md batch 2** (2026-09-30):
+  - Hero:
+    - Below `lg` the cap sits above centered copy: 260px tall on phones, 340px on tablets.
+    - The chip orbit shrinks to the cap's box (ResizeObserver): 96px at 320 wide, 130px at 390, 170px on tablets, 300px on desktop.
+    - On touch screens (`(hover: none)`) the cap turns with page scroll instead of the cursor.
+    - The canvas caps DPR at 1.5 and stops rendering off-screen (`frameloop` driven by `useInView`). The idle drift counts rendered time only, so it doesn't jump when rendering resumes.
+  - `public/graduation_hat.glb` is meshopt-compressed: 2.49 MB to 422 KB, with the same meshes, materials and triangle count.
+  - Trending:
+    - Max 4 cards; the whole card is one link, with a single padding.
+    - Grid is 1, 2, then 4 columns (4 only from `xl`).
+    - Phones get a "View all electives" link under the cards.
+    - `TiltCard` was replaced by `Tilt` + `ClippedCircle`, and `tilt-card.tsx` deleted.
+  - Review spotlight:
+    - The 300vh scroll-driven strip is replaced by the shadcn carousel (`embla-carousel-react`) with the newest 5 reviews.
+    - Dots and arrows sit under the cards and hide when everything fits.
+    - Carousel state is read with `useSyncExternalStore` to satisfy lint.
+  - Phone spacing and type sizes for how-it-works, grade-reveal (`h-svh`, number stacked over its label), final CTA and footer. `overflow-x-clip` on the landing `<main>`.
+  - Checked in headless Chrome at 320, 390, 768, 1100 and 1440 wide: no sideways scroll; carousel next/dots work.
+  - README rewritten (setup, Supabase, deploying to Vercel, known gaps).
+
 ## Partial or broken
 
 - [ ] **Dead CTAs.** The final-CTA button has no action, and "Rate a course you took" in the hero is plain text, not a link.
 - [ ] **3D model colors:** the books in `public/graduation_hat.glb` are saturated blue and red, which clash with the teal palette. They could be retinted in code by overriding the materials.
-- [ ] **Placeholders left over.**
-  - `sr-only` "Acme Inc." and `href="#"` logo links on the auth pages.
-  - Terms and Privacy links point to `#`.
-  - README is still the shadcn template.
-- [ ] **Lint: 0 errors, 4 warnings left.** Unused imports in `grade-reveal.tsx`, `how-it-works.tsx` and `highlight.tsx`; `<img>` in `tilt-card.tsx`.
+- [ ] **Lint: 0 errors, 3 warnings left.** Unused `DotPattern` import in `grade-reveal.tsx` and unused `dotScale` in `how-it-works.tsx` (both belong to commented-out code), and `_childRef` in `highlight.tsx`.
 - [ ] **Unused files:** `ScrollProgress.tsx`, `public/default_pfpf.png` (meant as the default avatar), and several `components/ui/*` (dock, menubar, border-beam, number-ticker, ...).
 
 ## Not started
@@ -83,7 +99,10 @@ Overall: the landing-page UI and auth plumbing are built, and the DB schema exis
 - [ ] **Framework pages:** `error.tsx` and a root `not-found.tsx` (`loading.tsx` exists for `/browse` and `/browse/[id]`).
 - [ ] **Terms and Privacy pages.**
 - [ ] **Tests.**
-- [ ] **Deployment:** Vercel, plus the Supabase and Google production redirect URLs.
+- [ ] **Deployment** (in progress, 2026-09-30): Vercel project `xourse`, domain `www.xourse.online`.
+  - The first builds failed with `supabaseUrl is required` because the Vercel project had no environment variables.
+  - Remaining in Vercel: add `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` and `NEXT_PUBLIC_SITE_URL=https://www.xourse.online`, then redeploy.
+  - Remaining in Supabase Auth: set the Site URL, and add `https://www.xourse.online/**` to Redirect URLs.
 
 ## Next steps (suggested order)
 
@@ -97,6 +116,6 @@ Overall: the landing-page UI and auth plumbing are built, and the DB schema exis
 4. ~~Navbar and `/browse`~~ (done 2026-09-29). It shows the empty state until courses are seeded.
 5. ~~Review form~~ (done 2026-09-29). Possible follow-ups: show course-level workload / grading averages on the course page; review likes (`review_likes` table exists, no UI).
 6. **Wire the landing sections to real data** and fix the CTAs.
-7. **Polish:** Apple button (remove or implement), Terms and Privacy, placeholders, loading and error states, mobile pass.
+7. **Polish:** Apple button (remove or implement), Terms and Privacy, loading and error states, mobile pass for the pages past the landing (landing done 2026-09-30).
 8. **SEO leftovers:** an `app/opengraph-image.tsx` (shared links currently unfurl with no image), and JSON-LD `Course` + `AggregateRating` on the course page if `/browse` is ever made public. A sitemap is pointless while everything but `/` sits behind the login wall.
-9. **Ship:** lint and typecheck clean, README, deploy, production auth redirect URLs. **Set `NEXT_PUBLIC_SITE_URL` to the real domain** — `metadataBase` and every `og:url` come from it, so leaving it at `http://localhost:3000` ships localhost URLs in the Open Graph tags.
+9. **Ship:** lint and typecheck clean, ~~README~~ (done 2026-09-30), deploy, production auth redirect URLs. **Set `NEXT_PUBLIC_SITE_URL` to the real domain** — `metadataBase` and every `og:url` come from it, so leaving it at `http://localhost:3000` ships localhost URLs in the Open Graph tags.

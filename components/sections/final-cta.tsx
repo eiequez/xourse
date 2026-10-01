@@ -6,13 +6,13 @@ import Link from "next/link"
 
 export default function FinalCTA() {
   return (
-    <section className="border-t border-umber/50 px-6 py-28 lg:px-24">
+    <section className="border-t border-umber/50 px-6 py-20 lg:px-24 lg:py-28">
       <div className="mx-auto max-w-3xl text-center">
         <motion.h2
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-heading text-4xl leading-tight font-semibold tracking-tight text-white lg:text-5xl"
+          className="font-heading text-3xl leading-tight font-semibold tracking-tight text-balance text-white sm:text-4xl lg:text-5xl"
         >
           For XMUM students
           <br />

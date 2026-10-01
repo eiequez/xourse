@@ -14,10 +14,10 @@ Current status and the todo list are in [progress.md](progress.md). Read it befo
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Framework | **Next.js 16.2.6**, App Router with RSC, React 19.2.4, TypeScript (strict). Next 16 breaks things you may expect: read `node_modules/next/dist/docs/` first. |
 | Styling   | **Tailwind CSS v4** through `@tailwindcss/postcss`. There is **no tailwind.config**: theme tokens live in `app/globals.css` under `@theme inline`. Also `tw-animate-css`. |
-| UI kit    | **shadcn** with style `base-nova`, built on **`@base-ui/react`, not Radix**. Extra registries: `@magicui` and `@unlumen-ui` (see `components.json`).    |
+| UI kit    | **shadcn** with style `base-nova`, built on **`@base-ui/react`, not Radix**. Extra registries: `@magicui` and `@unlumen-ui` (see `components.json`). The shadcn carousel uses `embla-carousel-react`. |
 | Backend   | **Supabase** (`@supabase/ssr` and `@supabase/supabase-js`) for auth (email/password and Google OAuth) and Postgres. Schema is below; the app doesn't query tables yet. |
 | Animation | `motion`, imported as `motion/react`. Don't install or import `framer-motion` directly.                                                                             |
-| 3D        | `three`, `@react-three/fiber` and `@react-three/drei` for the hero graduation-cap model (`public/graduation_hat.glb`). `@types/three` is a devDependency. |
+| 3D        | `three`, `@react-three/fiber` and `@react-three/drei` for the hero graduation-cap model (`public/graduation_hat.glb`, meshopt-compressed; `useGLTF` decodes it out of the box). `@types/three` is a devDependency. |
 | Icons     | `lucide-react`                                                                                                                                         |
 | Fonts     | Geist (`--font-sans`, also `--font-heading`) and Geist Mono (`--font-mono`) via `next/font/google` in `app/layout.tsx`.                                 |
 | Tooling   | pnpm, ESLint 9 (`eslint-config-next`), Prettier with `prettier-plugin-tailwindcss`. There are no tests.                                                |
@@ -67,9 +67,11 @@ app/
     [id]/actions.ts     server actions saveReview (upsert) and deleteReview
 components/
   sections/             landing-page sections (hero, ledger-marqee, how-it-works,
-                        grade-reveal, trending-electives, review-spotlight, final-cta)
+                        grade-reveal, trending-electives, review-spotlight (carousel), final-cta).
+                        Below lg the hero puts the cap above the copy; on touch screens
+                        ((hover: none)) the cap turns with page scroll instead of the cursor
   ui/                   shadcn and Magic UI components
-  unlumen-ui/           Unlumen UI components (tilt-card, glowing-badge, scramble-text, ...)
+  unlumen-ui/           Unlumen UI components (tilt, clipped-circle, glowing-badge, scramble-text, ...)
   browse/               course-browser (search, colored type chips, sort, ledger rows; client-side
                         filtering synced to the URL), star-rating, browse-header
   course/               course page parts: course-header, course-about, assessment-card,
@@ -88,9 +90,9 @@ lib/
   supabase/server.ts    createServerClient using await cookies() (for RSC, actions, routes)
   supabase/database.types.ts  generated DB types (both clients are typed with Database)
   courses.ts            CourseSummary type, sort options, courseHref, ratingTextClass (client-safe)
-  landing-data.ts       getLandingData(): trending (most reviewed, max 5) and ledger entries
+  landing-data.ts       getLandingData(): trending (most reviewed, max 4) and ledger entries
                         (reviewed first, then random "new" courses, 16 total), and the review
-                        spotlight (newest 6 reviews, no profanity, shortened to ~220 chars)
+                        spotlight (newest 5 reviews, no profanity, shortened to ~220 chars)
   supabase/public.ts    cookie-less anon client for cacheable public reads (landing page)
   course-queries.ts     server only: getCourseSummaries() for /browse, getCourseDetail(code)
                         (React cache) for the course page, with reviews + reviewer profiles
@@ -191,6 +193,7 @@ After a schema change, save the SQL in `supabase/migrations/` and regenerate `li
 - **Next 16:** middleware is now `proxy.ts` with a `proxy` export (Node runtime only); don't recreate `middleware.ts`. `cookies()` and `params` are async. Type pages with the global `PageProps<"/route/[param]">` helper.
 - **Landing data:** the ledger strip, trending cards and review spotlight are real (see `lib/landing-data.ts`). The spotlight shows each reviewer's avatar (or `DEFAULT_AVATAR`) and `@username`, publicly, on the landing. The hero chips and grade-reveal average are still mock data.
 - **Keep the landing static.** Don't use `lib/supabase/server.ts` (it reads cookies) in `app/page.tsx`; that would make every visit query the database. Use `createPublicClient()`. Anything that changes review numbers should call `revalidatePath("/")`.
-- `npx shadcn add` may generate `import { cn } from "cn"` and install an npm package called `cn`. Change the import to `@/lib/utils` and `pnpm remove cn`. It also prompts before overwriting `button.tsx`/`input.tsx`; answer no.
+- `npx shadcn add` may generate `import { cn } from "cn"` and install an npm package called `cn`. Change the import to `@/lib/utils` and `pnpm remove cn`. It also prompts before overwriting `button.tsx`/`input.tsx`; answer no. Run without a terminal (stdin closed), it stops at that prompt after installing dependencies but before writing any file, so write the component from the registry JSON (`https://ui.shadcn.com/r/styles/base-nova/<name>.json`) instead.
+- **Lint rejects `setState` called directly in an effect** (`react-hooks/set-state-in-effect`), and some stock shadcn components do it (the carousel did). Read external state with `useSyncExternalStore` instead, as `components/ui/carousel.tsx` and the review-spotlight dots do, or set state inside a subscription callback.
 - Use `next/link` `<Link>` for internal links. Lint rejects a plain `<a>` pointing at an existing page.
 - **Page titles:** the root layout sets `title.template = "%s | Xourse"`, so a page exports the bare title (`"Login"`, not `"Login | Xourse"`) or it renders as `Login | Xourse | Xourse`.

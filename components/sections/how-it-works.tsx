@@ -48,7 +48,7 @@ function StepItem({
         className="absolute top-1.5 -left-[2.65rem] h-3 w-3 rounded-full bg-sand"
       /> */}
       <span className="font-mono text-sm text-sand/70">{step.n}</span>
-      <h3 className="mt-2 font-heading text-2xl font-semibold tracking-tight text-white">
+      <h3 className="mt-2 font-heading text-xl font-semibold tracking-tight text-white sm:text-2xl">
         {step.title}
       </h3>
       <p className="mt-2 max-w-sm text-sm leading-relaxed text-bone/50">
@@ -66,18 +66,21 @@ export default function HowItWorks() {
   })
 
   return (
-    <section ref={containerRef} className="border-b px-6 py-28 lg:px-24">
+    <section
+      ref={containerRef}
+      className="border-b px-6 py-20 lg:px-24 lg:py-28"
+    >
       <div className="mx-auto max-w-3xl">
-        <p className="mb-16 font-mono text-xs tracking-[0.2em] text-sand uppercase">
+        <p className="mb-12 font-mono text-xs tracking-[0.2em] text-sand uppercase lg:mb-16">
           How it works
         </p>
-        <div className="relative pl-10">
+        <div className="relative pl-8 sm:pl-10">
           <div className="absolute top-1 left-0 h-full w-px bg-bone/10" />
           <motion.div
             style={{ scaleY: scrollYProgress }}
             className="absolute top-1 left-0 h-full w-px origin-top bg-sand"
           />
-          <div className="flex flex-col gap-16">
+          <div className="flex flex-col gap-12 lg:gap-16">
             {steps.map((step, i) => (
               <StepItem
                 key={step.n}

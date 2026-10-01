@@ -29,7 +29,7 @@ export default function GradeReveal() {
 
   return (
     <section ref={ref} className="relative h-[220vh] bg-night">
-      <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
+      <div className="sticky top-0 flex h-svh flex-col items-center justify-center overflow-hidden px-6">
         <motion.div
           style={{ opacity: flickerOpacity }}
           className="pointer-events-none absolute inset-0"
@@ -48,11 +48,15 @@ export default function GradeReveal() {
           Across every reviewed elective
         </p>
 
-        <motion.div style={{ scale }} className="relative flex items-baseline">
-          <span className="font-heading text-[20vw] leading-none font-semibold tracking-tight text-white lg:text-[9rem]">
+        {/* Phones stack the label under a bigger number */}
+        <motion.div
+          style={{ scale }}
+          className="relative flex flex-col items-center sm:flex-row sm:items-baseline"
+        >
+          <span className="font-heading text-[32vw] leading-none font-semibold tracking-tight text-white sm:text-[20vw] lg:text-[9rem]">
             {display}
           </span>
-          <span className="ml-3 text-xl text-bone/40 lg:text-2xl">
+          <span className="mt-2 text-xl text-bone/40 sm:mt-0 sm:ml-3 lg:text-2xl">
             / 5.0 average
           </span>
         </motion.div>

@@ -27,9 +27,9 @@ export type SpotlightReview = {
   avatarUrl: string | null
 }
 
-const TRENDING_MAX = 5
+const TRENDING_MAX = 4
 const LEDGER_SIZE = 16
-const SPOTLIGHT_MAX = 6
+const SPOTLIGHT_MAX = 5
 const SPOTLIGHT_CHARS = 220
 const SPOTLIGHT_MIN_CHARS = 40
 

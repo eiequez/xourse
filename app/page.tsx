@@ -17,7 +17,8 @@ export default async function Home() {
   const { trending, ledger, spotlight } = await getLandingData()
 
   return (
-    <main className="bg-night">
+    // overflow-x-clip (not hidden) so the sticky sections keep working
+    <main className="overflow-x-clip bg-night">
       <HeroSection />
       <LedgerMarquee entries={ledger} />
       <HowItWorks />

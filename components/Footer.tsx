@@ -6,7 +6,7 @@ export default function Footer() {
         <p className="font-heading text-sm font-semibold tracking-tight text-bone/60">
           Xourse
         </p>
-        <p className="text-xs text-bone/30">
+        <p className="text-center text-xs text-bone/30 sm:text-right">
           Built by and for XMUM students. Not affiliated with the university
           administration.
         </p>
